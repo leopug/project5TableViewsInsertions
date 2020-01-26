@@ -4,12 +4,26 @@ class ViewController: UITableViewController {
 
     var allWords = [String]()
     var usedWords = [String]()
+    var gameState : GameState!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let defaults = UserDefaults.standard
+        if let gameStateSaved = defaults.object(forKey: "GameState") as? Data {
+            let jsonDecoder = JSONDecoder()
+            do {
+                gameState = try jsonDecoder.decode(GameState.self, from: gameStateSaved)
+            } catch {
+                print("errrroooorr")
+            }
+        }
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add
             , target: self, action: #selector(promptForAnswer))
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh
+            , target: self, action: #selector(resetGame))
         
     
         if let startWordsUrl = Bundle.main.url(forResource: "start",
@@ -27,7 +41,19 @@ class ViewController: UITableViewController {
     
     }
 
-    func startGame(){
+    @objc func startGame(){
+        
+        if gameState == nil {
+            title = allWords.randomElement()
+            usedWords.removeAll(keepingCapacity: true)
+        } else {
+            title = gameState.currentWord
+            usedWords = gameState.wordsUsed
+        }
+        tableView.reloadData()
+    }
+    
+    @objc func resetGame() {
         title = allWords.randomElement()
         usedWords.removeAll(keepingCapacity: true)
         tableView.reloadData()
@@ -61,40 +87,39 @@ class ViewController: UITableViewController {
     func submit(_ answer: String){
         let lowerAnswer = answer.lowercased()
         
-        let errorTitle: String
-        let errorMessage: String
-        
         if isPossible(word: lowerAnswer){
             if isOriginal(word: lowerAnswer){
                 if isReal(word: lowerAnswer){
-                    usedWords.insert(answer, at: 0)
+                    usedWords.insert(lowerAnswer, at: 0)
                     let indexPath = IndexPath(row: 0, section: 0)
                     tableView.insertRows(at: [indexPath], with: .automatic)
+                    save()
                     return
                 } else {
-                    errorTitle = "Word not recognized"
-                    errorMessage = "You cant just make them up, you know"
+                    showErrorMessage(withTitle: "Word not recognized",
+                                     andMessage: "You cant just make them up, you know")
                 }
             } else {
-                errorTitle = "Word already in use"
-                errorMessage = "Be more original"
+                showErrorMessage(withTitle: "Word already in use",
+                                 andMessage: "Be more original")
             }
-            
-        }else {
-            errorTitle = "Word not possible"
-            errorMessage = "Cant spell back that word \(title!.lowercased())"
+        } else {
+            showErrorMessage(withTitle: "Word not possible", andMessage: "Cant spell back that word \(title!.lowercased())")
         }
-        
-        let ac = UIAlertController(title: errorTitle, message: errorMessage, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "Ok", style: .default))
-        present(ac, animated: true)
-        
-        
     }
     
     func isPossible(word: String) -> Bool {
         
         guard var tempWord = title?.lowercased() else { return false }
+        
+        if tempWord == word {
+            return false
+        }
+        
+        if word.count < 2 {
+            return false
+        }
+        
         for letter in word {
             if let position = tempWord.firstIndex(of: letter) {
                 tempWord.remove(at: position)
@@ -104,9 +129,13 @@ class ViewController: UITableViewController {
         }
         return true
     }
+    
+    
     func isOriginal(word: String) -> Bool {
         return !usedWords.contains(word)
     }
+    
+    
     func isReal(word: String) -> Bool {
         
         let checker = UITextChecker()
@@ -115,4 +144,26 @@ class ViewController: UITableViewController {
         
         return misspelledRange.location == NSNotFound
     }
+    
+    func showErrorMessage(withTitle errorTitle: String, andMessage errorMessage: String){
+        let ac = UIAlertController(title: errorTitle, message: errorMessage, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Ok", style: .default))
+        present(ac, animated: true)
+    }
+    
+    func save() {
+        print("salvou agora?")
+        gameState = GameState()
+        gameState.currentWord = title
+        gameState.wordsUsed = usedWords
+        
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(gameState) {
+            let defaults = UserDefaults.standard
+            defaults.set(savedData, forKey: "GameState")
+        } else {
+            print("We failed to save the array")
+        }
+    }
+    
 }

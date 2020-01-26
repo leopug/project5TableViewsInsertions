@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F050AA423DDE3710069A589 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F050AA323DDE3710069A589 /* GameState.swift */; };
 		3F315B3423B669B60049A1D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F315B3323B669B60049A1D0 /* AppDelegate.swift */; };
 		3F315B3623B669B60049A1D0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F315B3523B669B60049A1D0 /* SceneDelegate.swift */; };
 		3F315B3823B669B60049A1D0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F315B3723B669B60049A1D0 /* ViewController.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3F050AA323DDE3710069A589 /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 		3F315B3023B669B60049A1D0 /* project5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = project5.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F315B3323B669B60049A1D0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3F315B3523B669B60049A1D0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 				3F315B3323B669B60049A1D0 /* AppDelegate.swift */,
 				3F315B3523B669B60049A1D0 /* SceneDelegate.swift */,
 				3F315B3723B669B60049A1D0 /* ViewController.swift */,
+				3F050AA323DDE3710069A589 /* GameState.swift */,
 				3F315B3923B669B60049A1D0 /* Main.storyboard */,
 				3F315B3C23B669BA0049A1D0 /* Assets.xcassets */,
 				3F315B3E23B669BA0049A1D0 /* LaunchScreen.storyboard */,
@@ -143,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F315B3823B669B60049A1D0 /* ViewController.swift in Sources */,
+				3F050AA423DDE3710069A589 /* GameState.swift in Sources */,
 				3F315B3423B669B60049A1D0 /* AppDelegate.swift in Sources */,
 				3F315B3623B669B60049A1D0 /* SceneDelegate.swift in Sources */,
 			);
